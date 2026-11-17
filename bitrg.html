@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Feliz Aniversário! 🎉</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    --bg1: #ffe6f1;
+    --bg2: #ffd9ea;
+    --card: rgba(255, 255, 255, 0.18);
+    --title: #d6246e;
+    --text: #5a1740;
+  }
+  html { color-scheme: light; height: 100%; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    font-family: "Quicksand", "Segoe UI", Arial, sans-serif;
+    color: var(--text);
+    background: linear-gradient(160deg, var(--bg1), var(--bg2));
+    overflow-x: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Conteúdo central */
+  main {
+    position: relative;
+    z-index: 5;
+    text-align: center;
+    max-width: 560px;
+    margin: 24px 16px;
+    padding: 36px 28px;
+    background: var(--card);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    border-radius: 28px;
+    box-shadow: 0 10px 40px rgba(214, 36, 110, 0.10);
+    animation: entrada 1s ease both;
+  }
+  @keyframes entrada {
+    from { opacity: 0; transform: translateY(24px) scale(0.96); }
+    to   { opacity: 1; transform: none; }
+  }
+  h1 {
+    font-family: "Dancing Script", "Brush Script MT", cursive;
+    font-weight: 700;
+    font-size: clamp(2.6rem, 10vw, 4.2rem);
+    color: var(--title);
+    margin: 8px 0 14px;
+    line-height: 1.2;
+  }
+  p {
+    font-size: clamp(1.05rem, 3.4vw, 1.3rem);
+    line-height: 1.6;
+    margin: 0 0 22px;
+    font-weight: 600;
+  }
+  button {
+    font: inherit;
+    font-weight: 600;
+    color: #b0145a;
+    background: transparent;
+    border: 2px solid #b0145a;
+    border-radius: 999px;
+    padding: 12px 28px;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(176, 20, 90, 0.3);
+    transition: transform 0.2s;
+  }
+  button:hover { transform: scale(1.06); }
+  button:active { transform: scale(0.97); }
+
+  /* Estrelas estáticas no fundo (atrás do texto) */
+  .estrela {
+    position: fixed;
+    z-index: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+  .estrela svg { display: block; width: 100%; height: 100%; }
+
+  canvas { position: fixed; inset: 0; z-index: 10; pointer-events: none; }
+
+  .pergunta {
+    font-size: clamp(1.1rem, 3.6vw, 1.35rem);
+    color: var(--title);
+    font-weight: 700;
+    margin: 0 0 14px;
+  }
+  .opcoes {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+  .opcoes button {
+    flex: 1 1 0;
+    min-height: 52px;
+    padding: 12px 14px;
+    line-height: 1.2;
+  }
+  #naoAbrir {
+    color: #fff;
+    background: #8a1048;
+    border-color: #8a1048;
+    box-shadow: 0 6px 16px rgba(138, 16, 72, 0.4);
+  }
+
+  h1.titulo-pagina { font-size: clamp(2rem, 7vw, 2.8rem); margin-bottom: 18px; }
+  .cartao {
+    background: rgba(255, 255, 255, 0.45);
+    border-radius: 18px;
+    padding: 10px;
+    box-shadow: 0 6px 20px rgba(214, 36, 110, 0.15);
+    text-align: left;
+  }
+  .musica {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 8px;
+    border-radius: 12px;
+    color: inherit;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .musica + .musica { margin-top: 4px; }
+  .musica:hover { background: rgba(255, 255, 255, 0.6); }
+  .mini {
+    flex: none;
+    width: 112px;
+    aspect-ratio: 16 / 9;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #2b2b2b, #0f0f0f);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mini svg { width: 36px; height: 26px; }
+  .info { min-width: 0; }
+  .info strong { display: block; font-size: 1rem; line-height: 1.25; }
+  .info span { font-size: 0.88rem; opacity: 0.8; }
+
+  /* Carta (segunda página) */
+  .papel {
+    margin: 0 0 22px;
+    padding: 26px 22px 18px;
+    border-radius: 6px;
+    background:
+      radial-gradient(ellipse 18% 14% at 12% 18%, rgba(110, 65, 20, 0.40), transparent),
+      radial-gradient(ellipse 14% 12% at 86% 10%, rgba(90, 50, 15, 0.35), transparent),
+      radial-gradient(ellipse 20% 16% at 80% 72%, rgba(100, 60, 20, 0.40), transparent),
+      radial-gradient(ellipse 16% 12% at 18% 84%, rgba(90, 50, 15, 0.35), transparent),
+      radial-gradient(ellipse 10% 8% at 55% 40%, rgba(110, 65, 20, 0.25), transparent),
+      radial-gradient(ellipse 40% 30% at 50% 50%, rgba(150, 100, 40, 0.15), transparent),
+      linear-gradient(160deg, #f8ebbd, #edd596);
+    box-shadow: inset 0 0 40px rgba(120, 70, 20, 0.45), 0 8px 20px rgba(90, 40, 20, 0.25);
+  }
+  .papel h1 {
+    color: #8a2a1a;
+    font-size: clamp(2.2rem, 8vw, 3rem);
+    margin-bottom: 12px;
+  }
+  .papel p {
+    color: #4a2f14;
+    text-align: left;
+    margin-bottom: 16px;
+  }
+  .linhas {
+    height: 112px;
+    background: repeating-linear-gradient(to bottom, transparent 0, transparent 27px, rgba(110, 70, 30, 0.35) 27px, rgba(110, 70, 30, 0.35) 28px);
+  }
+
+  /* Segunda página: envelope e carta */
+  #mensagem {
+    display: grid;
+    width: min(560px, calc(100% - 32px));
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    border-radius: 0;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  #mensagem[hidden] { display: none; }
+  .cena {
+    grid-area: 1 / 1;
+    align-self: center;
+    justify-self: center;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .cena > .papel { width: 100%; }
+  .envelope-svg {
+    display: block;
+    width: min(300px, 78vw);
+    height: auto;
+    overflow: visible;
+    filter: drop-shadow(0 12px 14px rgba(120, 50, 70, 0.35));
+    animation: flutuar 3.6s ease-in-out infinite;
+  }
+  @keyframes flutuar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  #aba { transform-box: fill-box; transform-origin: 50% 0; transition: transform 0.6s ease; }
+  #abaForma { transition: fill 0.6s; }
+  #selo { transition: opacity 0.25s; }
+  .envelope-svg.aberto #aba { transform: scaleY(-1); }
+  .envelope-svg.aberto #abaForma { fill: #e6cb94; }
+  .envelope-svg.aberto #selo { opacity: 0; }
+  #abrirCarta {
+    margin-top: 40px;
+    color: #4a2f14;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    padding: 14px 34px;
+    border: 1px solid rgba(110, 70, 30, 0.55);
+    border-radius: 14px 6px 16px 8px / 8px 16px 6px 14px;
+    background:
+      radial-gradient(circle at 84% 30%, transparent 0 7px, rgba(95, 55, 20, 0.45) 8px 10px, transparent 11px),
+      radial-gradient(ellipse 30% 45% at 14% 72%, rgba(110, 65, 20, 0.35), transparent),
+      radial-gradient(ellipse 25% 38% at 58% 18%, rgba(100, 60, 20, 0.25), transparent),
+      repeating-linear-gradient(45deg, rgba(120, 80, 30, 0.07) 0 2px, transparent 2px 4px),
+      linear-gradient(160deg, #f4de9b, #e0bf70);
+    box-shadow: inset 0 0 14px rgba(120, 70, 20, 0.5), 0 6px 14px rgba(90, 40, 20, 0.3);
+    text-shadow: 0 1px 0 rgba(255, 240, 200, 0.5);
+  }
+  #abrirCarta:disabled { cursor: default; }
+  #cenaCarta { visibility: hidden; opacity: 0; }
+  #mensagem.carta-aberta #cenaEnvelope { animation: sumir 0.6s ease forwards; pointer-events: none; }
+  #mensagem.carta-aberta #cenaCarta { visibility: visible; animation: carta-sai 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.25s both; }
+  @keyframes sumir { to { opacity: 0; transform: translateY(40px) scale(0.9); visibility: hidden; } }
+  @keyframes carta-sai {
+    from { opacity: 0; transform: translateY(80px) scale(0.35); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* Celulares */
+  @media (max-width: 480px) {
+    main { padding: 28px 18px; border-radius: 22px; }
+    .papel { padding: 22px 16px 14px; }
+    .opcoes { gap: 10px; }
+    .opcoes button { font-size: 0.95rem; padding: 10px 8px; }
+    #continuar { width: 100%; padding: 14px 16px; }
+  }
+</style>
+</head>
+<body>
+
+  <main id="inicio">
+    <h1 id="titulo">PAABÈNS ELLY!!!</h1>
+    <p>FELIZZ ANIVERSÁRIO ELLY!! Infelizmente, hoje, não vou poder estar com você, então, com todo meu coração eu te preparei isso p você conseguir ver daí da sua casa &lt;3</p>
+    <p class="pergunta">Aceitar o webpresente</p>
+    <div class="opcoes">
+      <button id="abrir">Aceito</button>
+      <button id="naoAbrir">Deixa pra lá</button>
+    </div>
+  </main>
+
+  <main id="mensagem" hidden>
+    <div class="cena" id="cenaEnvelope">
+      <svg id="envelopeSvg" class="envelope-svg" viewBox="0 0 300 200" aria-hidden="true">
+        <rect width="300" height="200" rx="8" fill="#dcc18a"/>
+        <rect x="28" y="30" width="244" height="150" rx="4" fill="#fbf3d6" stroke="#caa86b"/>
+        <polygon points="0,0 150,108 0,200" fill="#f1dcb0" stroke="#b58a52" stroke-width="1.5" stroke-linejoin="round"/>
+        <polygon points="300,0 150,108 300,200" fill="#f1dcb0" stroke="#b58a52" stroke-width="1.5" stroke-linejoin="round"/>
+        <polygon points="0,200 150,100 300,200" fill="#f8eacb" stroke="#b58a52" stroke-width="1.5" stroke-linejoin="round"/>
+        <g id="aba">
+          <polygon id="abaForma" points="0,0 300,0 150,118" fill="#f3e0b8" stroke="#b58a52" stroke-width="1.5" stroke-linejoin="round"/>
+          <g id="selo">
+            <circle cx="150" cy="114" r="17" fill="#c2203f"/>
+            <circle cx="150" cy="114" r="12.5" fill="none" stroke="#e5556f" stroke-width="1.5"/>
+            <path d="M150 121.5s-7-4.2-7-8.8c0-2.6 2-4.4 4.1-4.4 1.2 0 2.3.6 2.9 1.6.6-1 1.7-1.6 2.9-1.6 2.1 0 4.1 1.8 4.1 4.4 0 4.6-7 8.8-7 8.8z" fill="#ffd9e3"/>
+          </g>
+        </g>
+      </svg>
+      <button id="abrirCarta">Abrir Carta</button>
+    </div>
+
+    <div class="cena" id="cenaCarta">
+    <div class="papel">
+      <h1 id="titulo2">para o meu amor, elly</h1>
+      <p>hoje, dia 17/11, o meu amorzinho faz mais um ano de vida, e eu não poderia ser mais grato po poder estar escrevendo essa carta pra alguém tão especial feito você. espero que a cada novo dia que passe voce se torne uma pessoa mais incrível do que já é e que nesse processo me motive a também melhorar por voce. Que você saiba que vou sempre estar do seu lado pra te apoiar, nos seus momentos ruins pra te ajudar e nos seus momentos felizes pra gente compartilhar eles juntos. peço desculpas por todas as vezes que eu bobinho possa ter feito alguma bobagem, agradeço pelas vezes que vocẽ me perdoou e espero que todos os problemas que possam nos aparecer sejam resolvidos. Eu te amo muito &lt;3 </p>
+      <div class="linhas"></div>
+    </div>
+    </div>
+  </main>
+
+  <main id="musicas" hidden>
+    <h1 class="titulo-pagina">Músicas que me lembram a gente</h1>
+    <div class="cartao">
+      <div id="listaMusicas"></div>
+    </div>
+    <button id="continuar" style="margin-top: 22px;">Continuar</button>
+  </main>
+
+  <canvas id="confete"></canvas>
+
+<script>
+
+  // Estrelas estáticas coloridas (posição fixa, cores alternadas)
+  const CORES_ESTRELAS = ["#ff4f9a", "#e53935", "#2196f3", "#ffc107"]; // rosa, vermelho, azul, amarelo
+  const POSICOES_ESTRELAS = [ // [esquerda %, topo %, tamanho px]
+    [6, 8, 37], [18, 22, 26], [4, 40, 31], [12, 62, 40], [7, 86, 29], [24, 92, 33], [40, 5, 26],
+    [58, 94, 31], [78, 6, 33], [92, 16, 40], [88, 38, 26], [93, 60, 33], [83, 80, 37], [70, 90, 24],
+    [30, 10, 22], [14, 50, 24], [48, 90, 26], [66, 8, 24], [90, 92, 28], [2, 74, 26]
+  ];
+  const escala = innerWidth < 600 ? 0.75 : 1;
+  POSICOES_ESTRELAS.forEach(([x, y, tam], i) => {
+    const el = document.createElement("div");
+    el.className = "estrela";
+    el.style.left = x + "%";
+    el.style.top = y + "%";
+    el.style.width = el.style.height = tam * escala + "px";
+    el.style.transform = "rotate(" + (i % 2 ? 12 : -12) + "deg)";
+    el.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="' + CORES_ESTRELAS[i % 4] + '"/></svg>';
+    document.body.appendChild(el);
+  });
+
+  // Confete
+  const canvas = document.getElementById("confete");
+  const ctx = canvas.getContext("2d");
+  let pecas = [];
+  function ajustar() { canvas.width = innerWidth; canvas.height = innerHeight; }
+  addEventListener("resize", ajustar); ajustar();
+
+  const cores = ["#ff5fa2", "#ffd166", "#06d6a0", "#8ecae6", "#c77dff", "#ffffff", "#ff9e6d"];
+  function explodir(x, y, qtd = 120) {
+    for (let i = 0; i < qtd; i++) {
+      const ang = Math.random() * Math.PI * 2;
+      const vel = 4 + Math.random() * 9;
+      pecas.push({
+        x, y,
+        vx: Math.cos(ang) * vel,
+        vy: Math.sin(ang) * vel - 5,
+        w: 6 + Math.random() * 6,
+        h: 8 + Math.random() * 8,
+        rot: Math.random() * 6,
+        vr: Math.random() * 0.3 - 0.15,
+        cor: cores[Math.floor(Math.random() * cores.length)],
+        vida: 140 + Math.random() * 60
+      });
+    }
+  }
+  function animar() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pecas = pecas.filter(p => p.vida > 0 && p.y < canvas.height + 30);
+    for (const p of pecas) {
+      p.vy += 0.22; p.vx *= 0.99;
+      p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.vida--;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.globalAlpha = Math.min(1, p.vida / 40);
+      ctx.fillStyle = p.cor;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+    }
+    requestAnimationFrame(animar);
+  }
+  animar();
+
+  // Confete ao abrir a página e ao clicar no botão
+  setTimeout(() => { explodir(innerWidth * 0.25, innerHeight * 0.6); explodir(innerWidth * 0.75, innerHeight * 0.6); }, 600);
+  // Pergunta da carta
+  const frases = ["Tem certeza?", "Vai fazer isso mesmo?", "Vai ser assim então?"];
+  let indiceFrase = 0;
+  const botaoNao = document.getElementById("naoAbrir");
+  botaoNao.addEventListener("click", () => {
+    botaoNao.textContent = frases[indiceFrase];
+    indiceFrase = (indiceFrase + 1) % frases.length;
+  });
+  // Navegação entre as páginas (usa #mensagem e #musicas na URL)
+  const paginas = ["inicio", "mensagem", "musicas"];
+  function mostrarTela() {
+    const nome = location.hash.slice(1);
+    const alvo = paginas.includes(nome) ? nome : "inicio";
+    paginas.forEach(id => { document.getElementById(id).hidden = id !== alvo; });
+    window.scrollTo(0, 0);
+  }
+  addEventListener("hashchange", mostrarTela);
+  mostrarTela();
+
+  document.getElementById("abrir").addEventListener("click", () => {
+    location.hash = "musicas";
+  });
+  document.getElementById("abrirCarta").addEventListener("click", (e) => {
+    e.currentTarget.disabled = true;
+    document.getElementById("envelopeSvg").classList.add("aberto");
+    setTimeout(() => {
+      document.getElementById("mensagem").classList.add("carta-aberta");
+      explodir(innerWidth / 2, innerHeight / 2, 160);
+    }, 750);
+  });
+  document.getElementById("continuar").addEventListener("click", () => {
+    location.hash = "mensagem";
+  });
+
+  // Músicas: troque pelos títulos e artistas reais.
+  // Se tiver o código do vídeo do YouTube (o que vem depois de v= no link), coloque em id.
+  const MUSICAS = [
+    { titulo: "we fell in love in october", artista: "girl in red", id: "iggmiF7DNoM&list=RDiggmiF7DNoM&start_radio=1" },
+    { titulo: "Pras Damas", artista: "Oriente", id: "boPw4_DguGI&list=RDboPw4_DguGI&start_radio=1" },
+    { titulo: "Forget-Me-Not", artista: "Laufey", id: "Yr4tx6wPVhw" }
+  ];
+  const lista = document.getElementById("listaMusicas");
+  MUSICAS.forEach(m => {
+    const a = document.createElement("a");
+    a.className = "musica";
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.href = m.id
+      ? "https://www.youtube.com/watch?v=" + m.id
+      : "https://www.youtube.com/results?search_query=" + encodeURIComponent(m.titulo + " " + m.artista);
+    a.innerHTML = '<div class="mini"><svg viewBox="0 0 36 26"><rect width="36" height="26" rx="7" fill="#ff0033"/><path d="M14 7l10 6-10 6z" fill="#fff"/></svg></div><div class="info"><strong></strong><span></span></div>';
+    a.querySelector("strong").textContent = m.titulo;
+    a.querySelector("span").textContent = m.artista + " · YouTube";
+    lista.appendChild(a);
+  });
+</script>
+</body>
+</html>
